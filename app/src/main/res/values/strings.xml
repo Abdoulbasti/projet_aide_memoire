@@ -1,3 +1,20 @@
 <resources>
     <string name="app_name">ProjetAideMemorisation</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_aide_memoire">AideMemoireActivity</string>
+    <string name="title_activity_parametrage">Parametrage</string>
+    <string name="title_activity_creation_suppression">CreationSuppression</string>
+    <string name="title_activity_choix_jeu_question">ChoixJeuQuestion</string>
+    <string name="title_activity_consulter_changer_status">ConsulterChangerStatus</string>
+    <string name="title_activity_consulater_status">ConsulaterStatus</string>
+    <string name="title_activity_consulter_reponse">ConsulterReponse</string>
+    <string name="title_activity_creer_jeu_question">CreerJeuQuestion</string>
+    <string name="title_activity_importer_jeu_question">ImporterJeuQuestion</string>
+    <string name="title_activity_supprimer_jeu_question">SupprimerJeuQuestion</string>
+    <string name="title_activity_enlever_question_du_jeu">EnleverQuestionDuJeu</string>
+    <string name="title_activity_choix_temps_reponse">ChoixTempsReponse</string>
+    <string name="title_activity_choix_couleur_fond">ChoixCouleurFond</string>
+    <string name="title_activity_choix_taille_police">ChoixTaillePolice</string>
+    <string name="title_activity_ajouter_question_dujeu">AjouterQuestionDUJeu</string>
+    <string name="title_activity_consulater_statistiques">ConsulaterStatistiques</string>
 </resources>

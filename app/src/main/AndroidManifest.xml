@@ -13,7 +13,87 @@
         android:theme="@style/Theme.ProjetAideMemorisation"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".creation_suppression.CreerJeuQuestion"
+            android:exported="false"
+            android:label="@string/title_activity_creer_jeu_question"
+            android:theme="@style/Theme.ProjetAideMemorisation" />
+        <activity
+            android:name=".aide_memoire.ConsulaterStatistiques"
+            android:exported="false"
+            android:label="@string/title_activity_consulater_statistiques"
+            android:theme="@style/Theme.ProjetAideMemorisation" />
+        <activity
+            android:name=".creation_suppression.AjouterQuestionDUJeu"
+            android:exported="false"
+            android:label="@string/title_activity_ajouter_question_dujeu"
+            android:theme="@style/Theme.ProjetAideMemorisation" />
+        <activity
+            android:name=".parametrage.ChoixTaillePolice"
+            android:exported="false"
+            android:label="@string/title_activity_choix_taille_police"
+            android:theme="@style/Theme.ProjetAideMemorisation" />
+        <activity
+            android:name=".parametrage.ChoixCouleurFond"
+            android:exported="false"
+            android:label="@string/title_activity_choix_couleur_fond"
+            android:theme="@style/Theme.ProjetAideMemorisation" />
+        <activity
+            android:name=".parametrage.ChoixTempsReponse"
+            android:exported="false"
+            android:label="@string/title_activity_choix_temps_reponse"
+            android:theme="@style/Theme.ProjetAideMemorisation" />
+        <activity
+            android:name=".creation_suppression.EnleverQuestionDuJeu"
+            android:exported="false"
+            android:label="@string/title_activity_enlever_question_du_jeu"
+            android:theme="@style/Theme.ProjetAideMemorisation" />
+        <activity
+            android:name=".creation_suppression.SupprimerJeuQuestion"
+            android:exported="false"
+            android:label="@string/title_activity_supprimer_jeu_question"
+            android:theme="@style/Theme.ProjetAideMemorisation" />
+        <activity
+            android:name=".creation_suppression.ImporterJeuQuestion"
+            android:exported="false"
+            android:label="@string/title_activity_importer_jeu_question"
+            android:theme="@style/Theme.ProjetAideMemorisation" />
+        <activity
+            android:name=".aide_memoire.CreerJeuQuestion"
+            android:exported="false"
+            android:label="@string/title_activity_creer_jeu_question"
+            android:theme="@style/Theme.ProjetAideMemorisation" />
+        <activity
+            android:name=".aide_memoire.ConsulterReponse"
+            android:exported="false"
+            android:label="@string/title_activity_consulter_reponse"
+            android:theme="@style/Theme.ProjetAideMemorisation" />
+        <activity
+            android:name=".aide_memoire.ConsulterChangerStatus"
+            android:exported="false"
+            android:label="@string/title_activity_consulter_changer_status"
+            android:theme="@style/Theme.ProjetAideMemorisation" />
+        <activity
+            android:name=".aide_memoire.ChoixJeuQuestion"
+            android:exported="false"
+            android:label="@string/title_activity_choix_jeu_question"
+            android:theme="@style/Theme.ProjetAideMemorisation" />
+        <activity
+            android:name=".creation_suppression.CreationSuppression"
+            android:exported="false"
+            android:label="@string/title_activity_creation_suppression"
+            android:theme="@style/Theme.ProjetAideMemorisation" />
+        <activity
+            android:name=".parametrage.Parametrage"
+            android:exported="false"
+            android:label="@string/title_activity_parametrage"
+            android:theme="@style/Theme.ProjetAideMemorisation" />
+        <activity
+            android:name=".aide_memoire.AideMemoire"
+            android:exported="false"
+            android:label="@string/title_activity_parametrage"
+            android:theme="@style/Theme.ProjetAideMemorisation" />
+        <activity
+            android:name=".MainActivityAideMemoire"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.ProjetAideMemorisation">
