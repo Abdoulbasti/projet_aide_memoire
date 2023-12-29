@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <application
+        android:name=".JeuQuestionnaireApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -12,6 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ProjetAideMemorisation"
         tools:targetApi="31">
+        <activity
+            android:name=".ViewModelBDD"
+            android:exported="false" />
         <activity
             android:name=".creation_suppression.CreerJeuQuestion"
             android:exported="false"
@@ -95,14 +99,11 @@
         <activity
             android:name=".MainActivityAideMemoire"
             android:exported="true"
-            android:label="@string/app_name"
             android:theme="@style/Theme.ProjetAideMemorisation">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
+                <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
     </application>
-
 </manifest>
