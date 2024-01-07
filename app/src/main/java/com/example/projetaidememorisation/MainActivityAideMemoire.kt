@@ -97,14 +97,16 @@ fun EcranSujetJeu() {
     )
 
     var sujetIdSelectionne by rememberSaveable { mutableStateOf<Int?>(null) }
+    var continuer by rememberSaveable { mutableStateOf(false) }
 
     if (sujetIdSelectionne == null) {
-        SelectSubjectScreen(viewModel) { sujetId ->
+        SelectSubjectScreen(viewModel) { sujetId, doitContinuer ->
             sujetIdSelectionne = sujetId
+            continuer = doitContinuer
         }
     } else {
         sujetIdSelectionne?.let { sujetId ->
-            QuestionnaireApp(sujetId)
+            QuestionnaireApp(sujetId, continuer, viewModel)
         }
     }
 }
@@ -112,13 +114,19 @@ fun EcranSujetJeu() {
 
 
 @Composable
-fun SelectSubjectScreen(viewModel: ViewModelBDD, onSubjectSelected: (Int) -> Unit) {
+fun SelectSubjectScreen(viewModel: ViewModelBDD, onSubjectSelected: (Int, Boolean) -> Unit) {
     val sujets = viewModel.sujets.observeAsState(initial = emptyList()).value
     var selectedSubjectId by rememberSaveable { mutableStateOf<Int?>(null) }
 
+
     Column {
         sujets.forEach { sujet ->
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { selectedSubjectId = sujet.sujetId }
+            ) {
                 RadioButton(
                     selected = sujet.sujetId == selectedSubjectId,
                     onClick = { selectedSubjectId = sujet.sujetId }
@@ -130,10 +138,19 @@ fun SelectSubjectScreen(viewModel: ViewModelBDD, onSubjectSelected: (Int) -> Uni
         Spacer(modifier = Modifier.height(8.dp))
 
         Button(
-            onClick = { selectedSubjectId?.let(onSubjectSelected) },
+            onClick = { selectedSubjectId?.let { onSubjectSelected(it, false) } },
             enabled = selectedSubjectId != null
         ) {
-            Text("Commencer")
+            Text("RECOMMENCER APPRENTISSAGE JEU DE QUESTION")
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Button(
+            onClick = { selectedSubjectId?.let { onSubjectSelected(it, true) } },
+            enabled = selectedSubjectId != null
+        ) {
+            Text("CONTINUER APPRENTISSAGE JEU DE QUESTION")
         }
     }
 }
@@ -143,34 +160,44 @@ fun SelectSubjectScreen(viewModel: ViewModelBDD, onSubjectSelected: (Int) -> Uni
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun QuestionnaireApp(sujetId: Int) {
-    val context = LocalContext.current
-    val viewModel: ViewModelBDD = viewModel(
-        factory = ViewModelBDDFactory(context.applicationContext as JeuQuestionnaireApplication)
-    )
+fun QuestionnaireApp(sujetId: Int, continuer: Boolean, viewModel: ViewModelBDD) {
 
+    val context = LocalContext.current
+    /*val viewModel: ViewModelBDD = viewModel(
+        factory = ViewModelBDDFactory(context.applicationContext as JeuQuestionnaireApplication)
+    )*/
     val questions = viewModel.obtenirQuestionsParSujet(sujetId).observeAsState(listOf()).value
     var currentQuestionIndex by rememberSaveable { mutableStateOf(0) }
 
+    val derniereQuestionId = viewModel.obtenirDerniereQuestionId(sujetId).observeAsState().value
+
+    LaunchedEffect(key1 = sujetId, key2 = continuer, key3 = derniereQuestionId) {
+        if (continuer && derniereQuestionId != null && derniereQuestionId != -1) {
+            currentQuestionIndex = questions.indexOfFirst { it.questionId == derniereQuestionId }
+            if (currentQuestionIndex == -1) currentQuestionIndex = 0
+        }
+    }
 
     Scaffold(
         topBar = { TopAppBar(title = { Text("Questionnaire") }) },
         content = {
             if (questions.isNotEmpty()) {
-                QuestionScreen(
-                    question = questions[currentQuestionIndex],
-                    onNavigateNext = {
-                        if (currentQuestionIndex < questions.size - 1) {
-                            currentQuestionIndex++
-                        }
-                    },
-                    context,
-                    viewModel
-                )
+                if (currentQuestionIndex < questions.size) {
+                    QuestionScreen(
+                        question = questions[currentQuestionIndex],
+                        onNavigateNext = {
+                            if (currentQuestionIndex < questions.size - 1) {
+                                currentQuestionIndex++
+                            }
+                            viewModel.mettreAJourAvancement(sujetId, questions[currentQuestionIndex].questionId)
+                        },
+                        context = context,
+                        viewModel = viewModel
+                    )
+                }
             } else {
                 Text("Pas de questions pour ce sujet")
             }
-
         }
     )
 }
