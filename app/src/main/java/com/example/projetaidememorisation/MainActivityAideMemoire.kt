@@ -491,6 +491,7 @@ fun titreActivite(titre : String, couleur : Color) {
 }
 
 
+
 @Composable
 fun buttonVersActivite(activityClass: Class<*>, text : String, context : Context) {
     Row(
@@ -509,6 +510,9 @@ fun buttonVersActivite(activityClass: Class<*>, text : String, context : Context
         }) { Text(text = text) }
     }
 }
+
+
+
 
 
 
