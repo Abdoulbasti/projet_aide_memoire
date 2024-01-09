@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.projetaidememorisation.InterfaceSuppressionSujetsOuQuestions
 import com.example.projetaidememorisation.MainActivityAideMemoire
 import com.example.projetaidememorisation.aide_memoire.AideMemoire
 import com.example.projetaidememorisation.buttonVersActivite
@@ -36,8 +37,9 @@ fun EcranSupprimerJeuQuestion() {
         //modifier = Modifier.fillMaxWidth(), // Cela étire la colonne pour occuper toute la largeur disponible
         //horizontalAlignment = Alignment.CenterHorizontally,
     ){
-        titreActivite("Supprimer  jeu de question", Color(0xFFCC99CC))
+        titreActivite("SUPPRIMER SUJETS OU QUESTIONS", Color(0xFFCC99CC))
 
+        InterfaceSuppressionSujetsOuQuestions() //Interface de suppression
 
         buttonVersActivite(AideMemoire::class.java, "Retour", context)
         buttonVersActivite(MainActivityAideMemoire::class.java, "Menu principal", context)

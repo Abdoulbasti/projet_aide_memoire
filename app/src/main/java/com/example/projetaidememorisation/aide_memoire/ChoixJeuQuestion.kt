@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.projetaidememorisation.EcranSujetJeu
 import com.example.projetaidememorisation.MainActivityAideMemoire
 import com.example.projetaidememorisation.buttonVersActivite
 import com.example.projetaidememorisation.titreActivite
@@ -35,8 +36,9 @@ fun EcranChoixJeuQuestion() {
         //modifier = Modifier.fillMaxWidth(), // Cela étire la colonne pour occuper toute la largeur disponible
         //horizontalAlignment = Alignment.CenterHorizontally,
     ){
-        titreActivite("Choix Jeu Question", Color(0xFFCC99CC))
+        titreActivite("CHOISIR SUJET ET REPONDRE AUX QUESTIONS", Color(0xFFCC99CC))
 
+        EcranSujetJeu()
 
         buttonVersActivite(AideMemoire::class.java, "Retour", context)
         buttonVersActivite(MainActivityAideMemoire::class.java, "Menu principal", context)

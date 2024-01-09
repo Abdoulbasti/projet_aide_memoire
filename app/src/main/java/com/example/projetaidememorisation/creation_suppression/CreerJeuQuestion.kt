@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import com.example.projetaidememorisation.AjouterNouveauSujetComposable
+import com.example.projetaidememorisation.GestionQuestionsScreen
 import com.example.projetaidememorisation.MainActivityAideMemoire
 import com.example.projetaidememorisation.buttonVersActivite
 import com.example.projetaidememorisation.titreActivite
@@ -28,8 +30,9 @@ fun EcranJeuQuestion() {
         //modifier = Modifier.fillMaxWidth(), // Cela étire la colonne pour occuper toute la largeur disponible
         //horizontalAlignment = Alignment.CenterHorizontally,
     ){
-        titreActivite("Enlever question du jeu", Color(0xFFCC99CC))
+        titreActivite("CREER UN NOUVEAU SUJET", Color(0xFFCC99CC))
 
+        AjouterNouveauSujetComposable() // Creer un nouveau sujet
 
         buttonVersActivite(CreationSuppression::class.java, "Retour", context)
         buttonVersActivite(MainActivityAideMemoire::class.java, "Menu principal", context)

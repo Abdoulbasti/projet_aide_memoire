@@ -30,13 +30,15 @@ fun EcranCreationSuppression() {
     ){
         titreActivite("Creations et Suppressions", Color(0xFFCC99CC))
 
-        buttonVersActivite(CreerJeuQuestion::class.java, "Creation Jeu de Question", context)
-        buttonVersActivite(ImporterJeuQuestion::class.java, "Importer Jeu de Question", context)
-        buttonVersActivite(SupprimerJeuQuestion::class.java, "Supprimer Jeu de Question", context)
+        buttonVersActivite(CreerJeuQuestion::class.java, "Creer un nouveau Sujet", context)
+
+        buttonVersActivite(AjouterQuestionDUJeu::class.java, "Ajouter une Question", context)
+
+        buttonVersActivite(SupprimerJeuQuestion::class.java, "Supprimer Sujet ou Question d'un sujet", context)
 
 
-        buttonVersActivite(AjouterQuestionDUJeu::class.java, "Ajouter une Question dans un jeu De Question", context)
-        buttonVersActivite(EnleverQuestionDuJeu::class.java, "Enlever une Question dans un jeu De Question", context)
+
+
 
 
         buttonVersActivite(MainActivityAideMemoire::class.java, "Retour", context)

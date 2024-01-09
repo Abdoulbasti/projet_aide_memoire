@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.projetaidememorisation.GestionQuestionsScreen
 import com.example.projetaidememorisation.MainActivityAideMemoire
 import com.example.projetaidememorisation.aide_memoire.AideMemoire
 import com.example.projetaidememorisation.buttonVersActivite
@@ -36,8 +37,9 @@ fun EcranAjouterQuestionAuJeu() {
         //modifier = Modifier.fillMaxWidth(), // Cela étire la colonne pour occuper toute la largeur disponible
         //horizontalAlignment = Alignment.CenterHorizontally,
     ){
-        titreActivite("Ajouter un jeu de quesion", Color(0xFFCC99CC))
+        titreActivite("AJOUTER UNE QUESTION A UN SUJET", Color(0xFFCC99CC))
 
+        GestionQuestionsScreen()
 
         buttonVersActivite(CreationSuppression::class.java, "Retour", context)
         buttonVersActivite(MainActivityAideMemoire::class.java, "Menu principal", context)
