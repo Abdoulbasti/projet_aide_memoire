@@ -2,13 +2,17 @@ package com.example.projetaidememorisation
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.DownloadManager
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.material3.Button
 import androidx.compose.material3.RadioButton
 import androidx.compose.runtime.Composable
@@ -28,6 +32,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.DropdownMenu
@@ -78,17 +85,124 @@ class MainActivityAideMemoire : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            //-------------------------------------GESTION NOTICATIONS----------------------------------------
+            val context = LocalContext.current
+            val viewModel: ViewModelBDD = viewModel(
+                factory = ViewModelBDDFactory(context.applicationContext as JeuQuestionnaireApplication)
+            )
+            viewModel.scheduleNotificationsBasedOnStatus()
+            MonEcran()
+            //NotificationScreen()
+            //ChangerStatutScreen()
             //GestionQuestionsScreen()
             //InterfaceSuppressionSujetsOuQuestions()
             //AjouterNouveauSujetComposable()
-            MonEcran()
+            //MonEcran()
             //QuestionnaireApp(2)
             //EcranSujetJeu()
+            //DownloadAndAddQuestionsScreen()
         }
     }
 }
 
 
+
+//-------------------------------CHANGER LE STATUS D'UNE QUESTION MANUELLEMENT--------------------------------------------
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ChangerStatutScreen(){
+    val context = LocalContext.current
+    val viewModel: ViewModelBDD = viewModel(
+        factory = ViewModelBDDFactory(context.applicationContext as JeuQuestionnaireApplication)
+    )
+    val toutesLesQuestions = viewModel.obtenirToutesLesQuestions().observeAsState(initial = listOf()).value
+    var questionSelectionneeId by rememberSaveable { mutableStateOf<Int?>(null) }
+    var nouveauStatut by rememberSaveable { mutableStateOf("") }
+
+    // Envelopper l'ensemble de l'UI dans un Column
+    Column {
+        // Utiliser Modifier.weight pour la liste des questions
+        Column(Modifier.weight(1f).verticalScroll(rememberScrollState())) {
+            toutesLesQuestions.forEach { question ->
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)) {
+                    RadioButton(
+                        selected = question.questionId == questionSelectionneeId,
+                        onClick = { questionSelectionneeId = question.questionId }
+                    )
+                    Text(text = question.texteQuestion, Modifier.weight(1f))
+                    Text(text = "Statut actuel: ${question.status}")
+                }
+            }
+        }
+
+        TextField(
+            value = nouveauStatut,
+            onValueChange = { nouveauStatut = it },
+            label = { Text("Nouveau Statut") }
+        )
+
+        Button(onClick = {
+            questionSelectionneeId?.let { id ->
+                viewModel.changerStatutQuestion(id, nouveauStatut.toIntOrNull() ?: 0)
+                nouveauStatut=""
+            }
+        }) {
+            Text("Changer le statut")
+        }
+
+        // Boutons supplémentaires ici (en dehors de la liste défilante)
+        buttonVersActivite(AideMemoire::class.java, "Retour", context)
+        buttonVersActivite(MainActivityAideMemoire::class.java, "Menu principal", context)
+    }
+}
+
+
+
+//------------------------TELECHARGEMENT ET AJOUTER UN FICHIER QUI CONTIENT UN SUJET ET LES QUESTION--------------------------
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DownloadAndAddQuestionsScreen() {
+    val context = LocalContext.current
+    val viewModel: ViewModelBDD = viewModel(
+        factory = ViewModelBDDFactory(context.applicationContext as JeuQuestionnaireApplication)
+    )
+    var fileName by rememberSaveable { mutableStateOf("") }
+
+    // Enregistrement du BroadcastReceiver
+    DisposableEffect(key1 = context) {
+        context.registerReceiver(viewModel.downloadReceiver, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
+
+        onDispose {
+            context.unregisterReceiver(viewModel.downloadReceiver)
+        }
+    }
+
+    Column(modifier = Modifier.padding(16.dp)) {
+        TextField(
+            value = fileName,
+            onValueChange = { fileName = it },
+            label = { Text("Nom du fichier") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(Modifier.height(16.dp))
+
+        Button(
+            onClick = {
+                viewModel.setCurrentFileName(fileName)
+                viewModel.downloadJsonFile(fileName, context)
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Télécharger et Ajouter Sujet et les questions")
+        }
+    }
+}
+
+//------------------------------CHOIX SUJET ET FAIRE DEFFILLER LES QUESTIONS----------------------------------------
 @Composable
 fun EcranSujetJeu() {
     val context = LocalContext.current
@@ -202,15 +316,13 @@ fun QuestionnaireApp(sujetId: Int, continuer: Boolean, viewModel: ViewModelBDD) 
     )
 }
 
-
-//--------------------------------------------------------
-
 @Composable
 fun QuestionScreen(question: Questions,
                    onNavigateNext: () -> Unit,
                    context: Context,
                    viewModel: ViewModelBDD,
-                   tempsLimite: Int = 10) {
+                   tempsLimite: Int = 60) //Temps du compte à rebours pour 60 second
+{
     val reponsesMelangees = rememberSaveable(question) { viewModel.melangerReponses(question.reponseCorrect, question.reponseIncorrect) }
     var selectedAnswer by rememberSaveable { mutableStateOf("") }
 
@@ -246,6 +358,7 @@ fun QuestionScreen(question: Questions,
         Button(onClick = {
             if (selectedAnswer == question.reponseCorrect) {
                 Toast.makeText(context, "Réponse correcte!", Toast.LENGTH_SHORT).show()
+                viewModel.incrementerStatutQuestion(question.questionId)
             } else {
                 Toast.makeText(context, "Réponse incorrecte!", Toast.LENGTH_SHORT).show()
             }
@@ -296,8 +409,11 @@ fun RadioButtonGroup(options: List<String>, onOptionSelected: (String) -> Unit) 
 }
 
 
-//--------------------------------------------------------------------------------------------------------------------
 
+
+
+
+//---------------------------------AJOUTER UNE QUESTION A UN SUJET--------------------------------------------------------------
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GestionQuestionsScreen() {
@@ -365,7 +481,7 @@ fun GestionQuestionsScreen() {
 
 
 
-//OK
+//------------------------SUPPRESSION SUJET OU QUESTION-----------------------------
 @Composable
 fun InterfaceSuppressionSujetsOuQuestions() {
     val context = LocalContext.current
@@ -430,7 +546,7 @@ fun InterfaceSuppressionSujetsOuQuestions() {
 
 
 
-//Ok
+//-----------------------------------------AJOUTER SUJET UN SUJET------------------------------------------------------
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AjouterNouveauSujetComposable() {
@@ -515,16 +631,11 @@ fun buttonVersActivite(activityClass: Class<*>, text : String, context : Context
 
 
 
-
-
-//@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun MonEcran() {
     val context= LocalContext.current
 
     Column (
-        //modifier = Modifier.fillMaxWidth(), // Cela étire la colonne pour occuper toute la largeur disponible
-        //horizontalAlignment = Alignment.CenterHorizontally,
     ){
         val modif = Modifier.width(5.dp)
         val arrangement = Arrangement.Center

@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.projetaidememorisation.ChangerStatutScreen
 import com.example.projetaidememorisation.MainActivityAideMemoire
 import com.example.projetaidememorisation.buttonVersActivite
 import com.example.projetaidememorisation.titreActivite
@@ -37,8 +38,6 @@ fun EcranConsulterChangerStatus() {
     ){
         titreActivite("Consulter et changer status jeu de question", Color(0xFFCC99CC))
 
-
-        buttonVersActivite(AideMemoire::class.java, "Retour", context)
-        buttonVersActivite(MainActivityAideMemoire::class.java, "Menu principal", context)
+        ChangerStatutScreen()
     }
 }

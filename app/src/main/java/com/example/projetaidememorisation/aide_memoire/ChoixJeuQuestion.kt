@@ -33,8 +33,6 @@ fun EcranChoixJeuQuestion() {
     val context= LocalContext.current
 
     Column (
-        //modifier = Modifier.fillMaxWidth(), // Cela étire la colonne pour occuper toute la largeur disponible
-        //horizontalAlignment = Alignment.CenterHorizontally,
     ){
         titreActivite("CHOISIR SUJET ET REPONDRE AUX QUESTIONS", Color(0xFFCC99CC))
 

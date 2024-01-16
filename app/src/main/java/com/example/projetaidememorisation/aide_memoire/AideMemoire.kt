@@ -31,9 +31,8 @@ fun EcranAideMemoire() {
     ){
         titreActivite("Aide Memoire", Color(0xFFCC99CC))
 
-        buttonVersActivite(ChoixJeuQuestion::class.java, "Choix Jeu de Questions", context)
-        buttonVersActivite(ConsulaterStatistiques::class.java, "consulater statistiques", context)
-        buttonVersActivite(ConsulterChangerStatus::class.java, "Changer Status", context)
+        buttonVersActivite(ChoixJeuQuestion::class.java, "Choix Jeu de Questions et repondre au question", context)
+        buttonVersActivite(ConsulterChangerStatus::class.java, "Consulter/Changer Statut", context)
 
 
         buttonVersActivite(MainActivityAideMemoire::class.java, "Retour", context)
