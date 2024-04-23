@@ -635,8 +635,7 @@ fun buttonVersActivite(activityClass: Class<*>, text : String, context : Context
 fun MonEcran() {
     val context= LocalContext.current
 
-    Column (
-    ){
+    Column {
         val modif = Modifier.width(5.dp)
         val arrangement = Arrangement.Center
         titreActivite("PAGE D'ACCEUIL JEU QUESTIONNAIRE", Color(0xFFCC99CC))
